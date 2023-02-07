@@ -9,7 +9,7 @@
         <title>Text - Summary</title>
     </head>
     <body class="text-slate-900">
-        <form action={{ route('text.summarizeText') }} method="post">
+        <form action={{ route('home.summarizeText') }} method="post">
             @csrf
             <textarea class="border-emerald-700 border-2 rounded-lg focus:outline-none px-4 py-3 text-lg max-w-lg" name="inputed_text" cols="30" rows="10"></textarea>
             <button class="bg-emerald-900 text-emerald-50">Submit</button>

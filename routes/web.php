@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,5 +31,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/home', [TextController::class, 'index']);
-Route::post('/home', [TextController::class, 'summarizeText'])->name('text.summarizeText');
+Route::get('/home', [TextController::class, 'index'])->name('home');
+Route::post('/home', [TextController::class, 'summarizeText'])->name('home.summarizeText');
+
+Route::fallback(function () {
+    return redirect()->route('welcome');
+});
