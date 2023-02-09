@@ -9,84 +9,39 @@
         <title>Text - Summary</title>
     </head>
     <body class="text-slate-900 text-lg">
-        <nav class="py-6 font-semibold bg-emerald-50">
-            <ul class="max-w-6xl mx-auto justify-between flex items-center">
-                <li>
-                    @if (Auth::check())
-                        <ul class="flex gap-4">
-                            <li>
-                                <a class="hover:text-emerald-700 transition-all hover:border-b-2 hover:border-emerald-700" href="{{ route('welcome') }}">Welcome</a> 
-                            </li>
-                            <li>
-                                <a class="hover:text-emerald-700 transition-all hover:border-b-2 hover:border-emerald-700" href="{{ route('profile.edit') }}">Profile</a> 
-                            </li>
-                        </ul>     
-                    @else
-                        <a class="hover:text-emerald-700 transition-all hover:border-b-2 hover:border-emerald-700" href="{{ route('welcome') }}">Welcome</a>
-                    @endif
-                </li>
-                <li>
-                    @if (Auth::check())
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-6 py-3 border border-transparent leading-4 font-medium rounded-md text-emerald-50 bg-emerald-700 hover:bg-emerald-800  focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->username }}</div>
-    
-                                <div class="ml-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
-    
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-    
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-    
-                                <x-dropdown-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                    @else
-                        <ul class="flex gap-4">
-                            <li>
-                                <a class="bg-emerald-700 hover:bg-emerald-800 transition-all text-emerald-50 py-2 px-6 rounded-md font-semibold" href="{{ route('register') }}">Sign Up</a> 
-                            </li>
-                            <li>
-                                <a class="border-2 border-emerald-700 hover:bg-emerald-200 transition-all text-emerald-700 py-2 px-6 rounded-md" href="{{ route('login') }}">Log In</a> 
-                            </li>
-                        </ul>     
-                    @endif
-                 </li>
-            </ul>
-        </nav>
+        <x-nav-bar></x-nav-bar>
         <section class="py-28">
             <header class="max-w-6xl mx-auto">
                 <h1 class=" text-emerald-900 font-black text-5xl text-center leading-tight"><span class="block">AI-Powered Text Summarization Tool :</span>  Simplify Your Reading Experience</h1>
             </header>
         </section>
-        <section class="py-28">
-            <div class="max-w-6xl mx-auto">
-                <form action={{ route('home.summarizeText') }} method="post">
-                    @csrf
-                    <textarea class="border-emerald-700 border-2 rounded-lg focus:outline-none px-4 py-3 text-lg max-w-lg" name="inputed_text" cols="30" rows="10"></textarea>
-                    <button class="bg-emerald-900 text-emerald-50">Submit</button>
+        <main>
+
+            <section class="py-28">
+                <div class="max-w-6xl mx-auto">
+                    <form id="textForm" class="container flex flex-col gap-3 mb-10" action={{ route('home.summarizeText') }} method="post">
+                        @csrf
+                        <label for="inputed_text" class="text-emerald-900 font-bold text-xl ml-2">Text</label>
+                        <textarea id="inputed_text" class="mb-5 tracking-wide font-medium ring-2 border-none ring-emerald-900 focus:ring-2 focus:ring-emerald-900 focus:outline focus:outline-8 focus:outline-emerald-200/60 transition-all rounded-lg px-8 py-4 text-lg max-h-72 placeholder:opacity-80" name="inputed_text" cols="30" rows="10" placeholder="Text, Paragraph, Blog ...">{{ app('request')->input('original') ? app('request')->input('original') : "" }}</textarea>
+                        <div class="flex gap-3 self-center items-center">
+                            <button id="summarizeBtn" class="bg-emerald-800 hover:bg-emerald-900 transition-all text-emerald-50 py-4 px-14 font-extrabold tracking-wide rounded-lg">
+                                Summarize
+                            </button>
+                            <a class="ring-2 ring-inset ring-slate-700 text-slate-700 bg-slate-200 hover:bg-slate-300 transition-all py-4 px-14 font-extrabold tracking-wide rounded-lg" href="{{ route('home') }}">Reset</a>
+                        </div>                   
                 </form>
-                @if (isset($result))
-                <input type="hidden" id="result" value="{{ $result }}">
+                @if (app('request')->input('result'))
+                <input type="hidden" id="result" value="{{ app('request')->input('result') }}">
+                @else
+                <input type="hidden" id="result" value="">
                 @endif
-                <h1 id="te"></h1>
+                <div>
+                    <p class="text-emerald-900 font-bold text-xl mb-4 ml-2">Summary</p>
+                    <div id="summary" class="ring-2 tracking-wide ring-emerald-900 h-72 rounded-lg px-8 py-4 overscroll-auto bg-emerald-50/70 font-medium"></div>
+                </div>
             </div>
         </section>
+    </main>
+    <x-footer></x-footer>
     </body>
-</html>
+    </html>
