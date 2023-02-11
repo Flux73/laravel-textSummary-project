@@ -30,14 +30,9 @@
                                 <a class="ring-2 ring-inset ring-slate-700 text-slate-700 bg-slate-200 hover:bg-slate-300 transition-all py-4 px-14 font-extrabold tracking-wide rounded-lg" href="{{ route('home') }}">Reset</a>
                             </div>                   
                     </form>
-                    @if (app('request')->input('result'))
-                    <input type="hidden" id="result" value="{{ app('request')->input('result') }}">
-                    @else
-                    <input type="hidden" id="result" value="">
-                    @endif
                     <div>
                         <p class="text-emerald-900 font-bold text-xl mb-4 ml-2">Summary</p>
-                        <div id="summary" class="ring-2 tracking-wide ring-emerald-900 h-72 rounded-lg px-8 py-4 overscroll-auto bg-emerald-50/70 font-medium"></div>
+                        <div id="summary" class="ring-2 tracking-wide ring-emerald-900 h-72 rounded-lg px-8 py-4 overscroll-auto bg-emerald-50/70 font-medium">{{ app('request')->input('result') }}</div>
                     </div>
                 </div>
             </section>

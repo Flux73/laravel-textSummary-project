@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    @vite('resources/js/profile.js')
     <title>Document</title>
 </head>
 <body class="text-slate-900 text-lg">
@@ -15,15 +16,18 @@
             <div class="max-w-5xl mx-auto">
                 <h2 class="mb-12 font-extrabold text-emerald-900 text-3xl">My Texts</h2>
                 <div class="mb-8 px-2 py-2 flex items-center border-b-2 border-gray-300">
-                    <p class=" font-medium">Results :
-                        <span class=" text-3xl font-semibold text-emerald-900">
-                            @if (count($texts) > 0)
+                    <div class="flex items-center gap-4">
+                        <p class=" font-medium">Results :
+                            <span class=" text-3xl font-semibold text-emerald-900">
+                                @if (count($texts) > 0)
                                 {{ count($texts) }}
-                            @else
+                                @else
                                 {{ 0 }}
-                            @endif
-                        </span>
-                    </p>
+                                @endif
+                            </span>
+                        </p>
+                        <a class=" self-end text-emerald-700 hover:text-emerald-600" href="{{ route('profile.edit') }}">Reset Sort</a>
+                    </div>
                     <div class="ml-auto flex gap-5 items-center">
                         <a href="{{ URL::current() }}?sort=starred"><ion-icon class="h-7 w-7 hover:scale-110 active:scale-90 transition-all delay-150 fill-amber-400" name="star"></ion-icon></a>
                         <x-dropdown align="right" width="48">
@@ -84,21 +88,21 @@
         <section class="py-16">
             <div class="max-w-5xl mx-auto">
                 <h2 class="mb-12 font-extrabold text-rose-700 text-3xl">Danger Zone</h2>
-
                     <div class="p-4 sm:p-8 bg-gradient-to-r from-red-500 to-rose-500 shadow rounded-xl text-white">
                         @include('profile.partials.delete-user-form')
                     </div>
-
         </section>
-    
-        @if(count($texts) > 0)
+    </main>
+     @if(count($texts) > 0)
             @foreach ($texts as $text)
                 <div id="modal-{{ $loop->index }}" class=" p-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-white w-2/3 rounded-2xl shadow-lg hidden">
                     <div class="flex gap-2 mb-10">
                         <span class="font-bold text-3xl text-emerald-900">{{ $loop->index + 1 }}</span>
                         <p class=" self-end mb-0.5">{{ Str::of($text->text)->words(10) }}</p>
-                        <p class="ml-auto text-emerald-900 font-semibold">{{ $text->created_at->diffForHumans() }}</p>
-                        <button id="close-{{ $loop->index }}" class="ml-4">Close</button>
+                        <div class="ml-auto flex items-center gap-4">
+                            <p class=" text-emerald-900 font-semibold">{{ $text->created_at->diffForHumans() }}</p>
+                            <button id="close-{{ $loop->index }}">Close</button>
+                        </div>
                     </div>
                     <div>
                         <div class=" mb-8">
@@ -113,42 +117,8 @@
                 </div>
             @endforeach
         @endif
-        <div id="overlay" class="absolute top-0 left-0 w-full h-full bg-emerald-900/50 backdrop-blur z-10 hidden"></div>
-    </main>
+        <div id="overlay" class="fixed top-0 left-0 w-full h-full bg-emerald-900/50 backdrop-blur z-10 hidden"></div>
     <x-footer></x-footer>
-    <script>
-        const texts = document.querySelectorAll(".textContainer")
-        const overlay = document.querySelector('#overlay')
-        let modal;
-
-        overlay.addEventListener('click', (e) => {
-            overlay.classList.add('hidden')
-            modal.classList.add('hidden')
-        })
-
-        texts.forEach((text, i) => {
-            text.addEventListener('click', (e) => {
-                if(e.target === document.querySelector("#trashBtn") || e.target === document.querySelector("#starBtn")) return;
-
-                modal = document.querySelector(`#modal-${i}`)
-                overlay.classList.remove('hidden');
-                modal.classList.remove('hidden');
-
-                document.querySelector(`#close-${i}`).addEventListener('click', (e) => {
-                    overlay.classList.add('hidden');
-                    modal.classList.add('hidden');
-                })
-            })
-        }) 
-
-        window.addEventListener('keyup', (e) => {
-            console.log(e.key !== 'Escape');
-            if (e.key !== 'Escape' || overlay.className.includes('hidden')) return;
-
-            overlay.classList.add('hidden');
-            modal.classList.add('hidden');
-        })
-    </script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
