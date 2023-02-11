@@ -24,8 +24,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.edit');
+    Route::patch('/profile/{id}', [ProfileController::class, 'updateStarred'])->name('profile.edit.starred');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroyText'])->name('profile.delete.text');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -33,6 +34,8 @@ require __DIR__.'/auth.php';
 
 Route::get('/home', [TextController::class, 'index'])->name('home');
 Route::post('/home', [TextController::class, 'summarizeText'])->name('home.summarizeText');
+
+// Route::get('/profile', [ProfileController::class, 'sortCreatedTime'])->name('sort.create.time');
 
 Route::fallback(function () {
     return redirect()->route('welcome');
