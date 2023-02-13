@@ -17,8 +17,10 @@ class TextController extends Controller
 
     public function summarizeText(Request $request) 
     {
-        
-        // Morocco is a country located in North Africa, known for its rich history and cultural heritage. It has a diverse geography that ranges from the Atlantic and Mediterranean coasts to the rugged Atlas Mountains. Morocco is also famous for its vibrant cities like Marrakesh, Fez, and Casablanca that offer a unique blend of traditional and modern cultures.\nOne of the most iconic landmarks in Morocco is the Hassan II Mosque, located in Casablanca. This stunning mosque is the largest in Morocco and one of the largest in the world, with a capacity of over 25,000 worshipers. It is a marvel of modern architecture, with its towering minaret and intricate details. Visitors to the mosque can take guided tours to learn about its history and religious significance.\nMoroccan cuisine is a blend of Mediterranean, African, and Arabic influences, and is known for its use of spices and herbs. Some popular dishes include tagine, a slow-cooked stew made with meat, vegetables, and spices, and couscous, a staple grain made from semolina that is often served with meat or vegetables. Visitors to Morocco can also enjoy mint tea, a sweet and refreshing drink made with green tea, mint leaves, and sugar that is traditionally served throughout the day.
+        $request->validate([
+            'inputed_text' => ['required', 'max:1000', 'min:50'],
+        ]);
+
         $prompt = trim($request->inputed_text);
         $result = OpenAI::completions()->create([
             "model" => "text-davinci-003",

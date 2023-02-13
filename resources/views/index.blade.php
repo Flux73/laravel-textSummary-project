@@ -22,7 +22,10 @@
                     <form id="textForm" class="container flex flex-col gap-3 mb-10" action={{ route('home.summarizeText') }} method="post">
                             @csrf
                             <label for="inputed_text" class="text-emerald-900 font-bold text-xl ml-2">Text</label>
-                            <textarea id="inputed_text" class="mb-5 tracking-wide font-medium ring-2 border-none ring-emerald-900 focus:ring-2 focus:ring-emerald-900 focus:outline focus:outline-8 focus:outline-emerald-200/60 transition-all rounded-lg px-8 py-4 text-lg max-h-72 placeholder:opacity-80" name="inputed_text" cols="30" rows="10" placeholder="Text, Paragraph, Blog ...">{{ app('request')->input('original') ? app('request')->input('original') : "" }}</textarea>
+                            @error('inputed_text')
+                                <p class="ml-2 text-red-700 font-bold">Text Must be less than 1000 characters or more than 50 characters!</p>
+                            @enderror
+                            <textarea id="inputed_text" class="mb-5 tracking-wide font-medium ring-2 border-none ring-emerald-900 focus:ring-2 focus:ring-emerald-900 focus:outline focus:outline-8 focus:outline-emerald-200/60 transition-all rounded-lg px-8 py-4 text-lg max-h-72 placeholder:opacity-80 @error('inputed_text') ring-red-900 focus:ring-red-900 focus:outline-red-200/60 @enderror" name="inputed_text" cols="30" rows="10" placeholder="Text, Paragraph, Blog ...">{{ app('request')->input('original') ? app('request')->input('original') : "" }}</textarea>
                             <div class="flex gap-3 self-center items-center">
                                 <button id="summarizeBtn" class="bg-emerald-800 hover:bg-emerald-700 transition-all text-emerald-50 py-4 px-14 font-extrabold tracking-wide rounded-lg">
                                     Summarize
