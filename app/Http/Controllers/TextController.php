@@ -17,9 +17,9 @@ class TextController extends Controller
 
     public function summarizeText(Request $request) 
     {
-        $request->validate([
-            'inputed_text' => ['required', 'max:1000', 'min:50'],
-        ]);
+        // $request->validate([
+        //     'inputed_text' => ['required', 'max:1000', 'min:50'],
+        // ]);
 
         $prompt = trim($request->inputed_text);
         $result = OpenAI::completions()->create([
